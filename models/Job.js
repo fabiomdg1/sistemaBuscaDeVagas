@@ -19,12 +19,6 @@ const Job = db.define("job", {
     },
     vagaNova:{
         type: Sequelize.INTEGER,
-    },
-    createdAt: {
-        type: Sequelize.STRING,
-    },
-    updatedAt: {
-        type: Sequelize.STRING,
     }
 });
 
