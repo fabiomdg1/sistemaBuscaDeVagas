@@ -1,5 +1,8 @@
 const express           = require("express");
+const exphbs            = require("express-handlebars");
+//const exphbs = require("express-handlebars").create({ defaultLayout: "main" });
 const app               = express();
+const path              = require("path");
 const db                = require("./db/connection");
 const bodyParse         = require("body-parser");
 
@@ -12,6 +15,22 @@ app.listen(PORT, function(){
 // body parser
 app.use(bodyParse.urlencoded({extended: false}));
 
+// handlebars
+app.set("views", path.join(__dirname, "views")); // Este comando está configurando o diretório onde o Express.js irá procurar as views da aplicação.
+
+app.engine("handlebars", exphbs({defaultlayout:"main"})); // Este comando está configurando o mecanismo de visualização (view engine) do Express.js para usar o Handlebars. {defaultlayout:"main"} define que o layout padrão para as views será o arquivo "main.handlebars".
+
+
+//app.engine("handlebars", exphbs({ defaultLayout: "main" }).engine);
+
+
+
+
+app.set("view engine", "handlebars"); // Este comando define o mecanismo de visualização padrão da aplicação como handlebars
+
+// static folder
+app.use(express.static(path.join(__dirname,"public"))); //Este trecho constrói o caminho absoluto para a pasta "public" dentro do diretório atual do seu aplicativo. A pasta "public" é comumente usada para armazenar arquivos estáticos que serão servidos para os clientes, como páginas HTML, imagens, folhas de estilo CSS e scripts JavaScript.
+
 // Conexão com o banco
 db
     .authenticate()
@@ -23,7 +42,7 @@ db
 
 // Rotas
 app.get("/", (req, res)=>{
-    res.send("Esta funcionando");
+    res.render("index");
 });
 
 // Rotas do jobs
