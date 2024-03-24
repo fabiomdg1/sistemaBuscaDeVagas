@@ -5,6 +5,7 @@ const app               = express();
 const path              = require("path");
 const db                = require("./db/connection");
 const bodyParse         = require("body-parser");
+const Job               = require("./models/Job");
 
 const PORT = 3000;
 
@@ -41,9 +42,41 @@ db
     });
 
 // Rotas
+// app.get("/", (req, res)=>{
+//     Job.findAll({order:[
+//         ["createdAt"], ["DESC"]
+//     ]})
+//     .then(jobs =>{
+//         res.render("index", {
+//             jobs
+//         });
+//     })
+//     .catch(error => {
+//         console.error('Erro ao buscar trabalhos:', error);
+//         res.status(500).send('Erro interno do servidor');
+//     });
+//});
+
+
+
+
+// Alimentando o jobs
 app.get("/", (req, res)=>{
-    res.render("index");
+    Job.findAll({ order: [["createdAt", "DESC"]] }) // Corrigindo a ordenação aqui
+    .then(jobs =>{
+        res.render("index", {
+            jobs
+        });
+    })
+    .catch(error => {
+        console.error('Erro ao buscar trabalhos:', error);
+        res.status(500).send('Erro interno do servidor');
+    });
 });
+
+
+
+
 
 // Rotas do jobs
 app.use("/jobs", require("./routes/jobs"));

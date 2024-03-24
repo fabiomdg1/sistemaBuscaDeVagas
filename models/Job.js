@@ -5,6 +5,9 @@ const Job = db.define("job", {
     titulo: {
         type: Sequelize.STRING,
     },
+    descricao: {
+        type: Sequelize.STRING,
+    },
     salario:{
         type: Sequelize.STRING,
     },
@@ -17,13 +20,10 @@ const Job = db.define("job", {
     vagaNova:{
         type: Sequelize.INTEGER,
     },
-    criadoEm: {
+    createdAt: {
         type: Sequelize.STRING,
     },
-    atualizadoEm: {
-        type: Sequelize.STRING,
-    },
-    descricao: {
+    updatedAt: {
         type: Sequelize.STRING,
     }
 });
