@@ -6,6 +6,8 @@ const path              = require("path");
 const db                = require("./db/connection");
 const bodyParse         = require("body-parser");
 const Job               = require("./models/Job");
+const Sequelize         = require("sequelize");
+const Op                = Sequelize.Op;
 
 const PORT = 3000;
 
@@ -41,42 +43,41 @@ db
         console.log("Ocorreu um erro ao autenticar", err);    
     });
 
-// Rotas
-// app.get("/", (req, res)=>{
-//     Job.findAll({order:[
-//         ["createdAt"], ["DESC"]
-//     ]})
-//     .then(jobs =>{
-//         res.render("index", {
-//             jobs
-//         });
-//     })
-//     .catch(error => {
-//         console.error('Erro ao buscar trabalhos:', error);
-//         res.status(500).send('Erro interno do servidor');
-//     });
-//});
-
-
-
-
 // Alimentando o jobs
 app.get("/", (req, res)=>{
-    Job.findAll({ order: [["createdAt", "DESC"]] }) // Corrigindo a ordenação aqui
-    .then(jobs =>{
-        res.render("index", {
-            jobs
-        });
-    })
-    .catch(error => {
-        console.error('Erro ao buscar trabalhos:', error);
-        res.status(500).send('Erro interno do servidor');
-    });
+
+    let search = req.query.job;
+    let query = "%"+search+"%";
+
+    if(!search){
+        Job.findAll({ order: 
+            [["createdAt", "DESC"]] 
+        }) // Corrigindo a ordenação aqui
+        .then(jobs =>{
+            res.render("index", {
+                jobs, search
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao buscar trabalhos:', error);
+            res.status(500).send('Erro interno do servidor 1');
+        });    
+    } else{
+        Job.findAll({ 
+            //where: {titulo: {[Op.like]: search}},
+            where: { titulo: { [Op.like]: query } }, // Condição de pesquisa ajustada
+            order: [["createdAt", "DESC"]] }) // Corrigindo a ordenação aqui
+        .then(jobs =>{
+            res.render("index", {
+                jobs, search
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao buscar trabalhos:', error);
+            res.status(500).send('Erro interno do servidor 2');
+        });    
+    }
 });
-
-
-
-
 
 // Rotas do jobs
 app.use("/jobs", require("./routes/jobs"));
