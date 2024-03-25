@@ -14,7 +14,7 @@ const Job = db.define("job", {
     empresa:{
         type: Sequelize.STRING,
     },
-    EMAIL:{
+    email:{
         type: Sequelize.STRING,
     },
     vagaNova:{

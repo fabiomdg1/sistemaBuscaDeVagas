@@ -24,11 +24,6 @@ app.set("views", path.join(__dirname, "views")); // Este comando está configura
 app.engine("handlebars", exphbs({defaultlayout:"main"})); // Este comando está configurando o mecanismo de visualização (view engine) do Express.js para usar o Handlebars. {defaultlayout:"main"} define que o layout padrão para as views será o arquivo "main.handlebars".
 
 
-//app.engine("handlebars", exphbs({ defaultLayout: "main" }).engine);
-
-
-
-
 app.set("view engine", "handlebars"); // Este comando define o mecanismo de visualização padrão da aplicação como handlebars
 
 // static folder
